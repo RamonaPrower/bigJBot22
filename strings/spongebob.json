@@ -1,0 +1,6 @@
+{
+    "intro": "SpongebobIntro.mp4",
+    "backgrounds": ["1.png", "2.png", "3.png", "4.png", "5.png", "6.png"],
+    "fontColour": ["#ebf05f","#e45ff0", "#62e129", "#32f496", "#c968f1"],
+    "soundClip": ["sample1.ogg", "sample2.ogg", "sample3.ogg", "sample4.ogg", "sample5.ogg", "sample6.ogg", "sample7.ogg", "sample8.ogg"]
+}

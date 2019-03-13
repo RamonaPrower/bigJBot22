@@ -1,3 +1,4 @@
 {
-    "token": "Bot Token goes here, also rename 'configdummy.json' to'config.json'"
+    "token": "Bot Token goes here, also rename 'configdummy.json' to'config.json'",
+    "ffprobefix": true
 }
