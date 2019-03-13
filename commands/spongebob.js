@@ -243,7 +243,7 @@ function delayedCleanup(randID) {
 }
 
 module.exports.info = {
-	name: 'Spongebob',
+	name: '!spongebob',
 	description: 'Generates a Spongebob version of text',
 	summon: '!spongebob [with optional text if you want a custom one]'
 }

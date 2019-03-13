@@ -71,7 +71,7 @@ function formatDate() {
 }
 
 module.exports.info = {
-    name: 'Unfollow me now',
+    name: '!unfollowme',
     description: 'Puts your user into the "unfollow me now" tweet from Tyler the Creator',
     summon: 'type !unfollowme'
 }

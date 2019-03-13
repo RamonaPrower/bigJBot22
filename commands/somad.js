@@ -30,7 +30,7 @@ module.exports = {
          }
 }
 module.exports.info = {
-    name: 'I am so mad',
+    name: '!somad',
     description: 'Generate a Image related to the "Tip: i am so fucking mad" meme',
     summon: 'type !somad'
 }

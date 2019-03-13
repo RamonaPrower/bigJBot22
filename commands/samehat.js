@@ -52,7 +52,7 @@ async function callHat(message, otherHat) {
 	message.channel.send(attachment);
 }
 module.exports.info = {
-    name: 'Same Hat!',
+    name: '!samehat',
     description: 'Show someone that same hat feeling',
     summon: '!samehat [optional:Tag someone]'
 }

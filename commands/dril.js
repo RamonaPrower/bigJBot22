@@ -134,7 +134,7 @@ function formatDate() {
 	return { dateTimeFin };
 }
 module.exports.info = {
-    name: 'Dril',
+    name: 'dril',
     description: 'Generates a dril tweet based on a new or last message',
     summon: '!dril [optional text here if you want a custom message]'
 }

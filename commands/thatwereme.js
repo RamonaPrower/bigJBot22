@@ -42,8 +42,8 @@ function formatDate() {
 	return { dateFin };
 }
 module.exports.info = {
-    name: 'God i wish that were me',
+    name: 'god i wish that were me',
     description: 'For when you want to get into the boots of BigJB21',
     summon: 'saying "god i wish that was/were me", also via !god'
 }
-module.exports.regexp = '(^!god|god i wish that (were|was) me)'
+module.exports.regexp = '(^!god|^god i wish that (were|was) me)'
