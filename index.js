@@ -10,7 +10,7 @@ for (const file of commandFiles) {
 }
 
 client.on('ready', () => {
-    console.log('ready');
+	console.log(`I'm up, and i'm part of ${client.guilds.size} servers`);
 });
 
 client.on('message', message => {
@@ -25,6 +25,22 @@ client.on('message', message => {
 	};
 });
 
+client.on('error', data => {
+	console.error('Connection Error', data.message);
+	autoRestartServer();
+})
+
+client.on('disconnect', data => {
+	console.error('I have Disconnected', data.message);
+	autoRestartServer();
+})
+
 client.login(config.token)
-	.then(console.log)
+	.then(console.log(`Logged In`))
 	.catch(console.error);
+
+function autoRestartServer() {
+	setTimeout(() => {
+		if (!client.status == 0) process.exit(1);
+	}, 1500)
+}
