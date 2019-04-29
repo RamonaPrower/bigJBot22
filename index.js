@@ -16,8 +16,8 @@ client.on('ready', () => {
 client.on('message', message => {
 	if (message.author.bot) return;
 	for (const key of client.commands) {
-		let newReg = new RegExp(key[0], 'gmi');
-		if (newReg.test(message)) {
+		const newReg = new RegExp(key[0], 'gmi');
+		if (newReg.test(message.content)) {
 			console.log('found ' + key[1].info.name);
 			key[1].execute(message);
 			break;

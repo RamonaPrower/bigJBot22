@@ -39,6 +39,6 @@ module.exports = {
 module.exports.info = {
     name: 'thinkin about thos beans',
     description: 'For when the beans are being thought about',
-    summon: '!beans, "thinkin about thos beans", or just "thosbeans"'
+    summon: '!thosbeans or "thinkin about thos beans"'
 }
-module.exports.regexp = '^!beans|(thinkin about )?(thos\s?beans)'
+module.exports.regexp = '^(!thosbeans|thinkin about thos beans)'
