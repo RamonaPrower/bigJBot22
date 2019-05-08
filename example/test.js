@@ -4,7 +4,7 @@
 module.exports = {
     execute(message) {
              const i = message;
-             console.log('summoned!' + info.name);
+             console.log('summoned!' + this.info.name);
          }
 }
 module.exports.info = {

@@ -14,7 +14,7 @@ module.exports = {
             console.log('no added input');
             data.push('i can do all these things!!');
             data.push(commands.map(command => command.info.name).join(', '));
-            data.push('you can also send !help [command name] to get info on a command');
+            data.push('you can also send !bighelp [command name] to get info on a command');
             return message.channel.send(data, {
                 split: true
             });

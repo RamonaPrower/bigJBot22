@@ -14,11 +14,6 @@ module.exports = {
         const attachment = new Discord.Attachment(canvas.toBuffer(), 'location.png');
         console.log(subject);
         message.channel.send(attachment);
-        try {
-            message.delete();
-        } catch (error) {
-            console.error(error);
-        }
     }
 }
 
@@ -26,7 +21,7 @@ function messageHandler(message) {
     let subject = message.cleanContent;
     subject = subject.replace(/(!location\s+|\s+(wants to|would like to) know your location$)/gmi, "")
     subject = subject.replace(/^@/gmi, "")
-    subject = subject.substring(0, 30);
+    subject = subject.substring(0, 32);
     subject += " wants to:";
     return subject;
 };
