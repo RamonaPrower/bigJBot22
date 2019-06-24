@@ -15,22 +15,23 @@ module.exports = {
 			// if other text, get other content in message excluding command
 			const splitMessage = message.content.split(' ');
 			splitMessage.shift();
-			var imageMessage = splitMessage.join(' ');
+			const imageMessage = splitMessage.join(' ');
 			checkMessage(message, imageMessage);
-		} else {
+		}
+		else {
 			// this is when it's just the command, it'll skip back a message
 			message.channel.fetchMessages({
-					limit: 1,
-					before: message.id,
-				})
+				limit: 1,
+				before: message.id,
+			})
 				.then(async messages => {
 					const lastMessage = await messages.first();
-					var imageMessage = lastMessage.content;
+					const imageMessage = lastMessage.content;
 					checkMessage(message, imageMessage);
-				})
+				});
 		}
-	}
-}
+	},
+};
 
 function checkMessage(message, imageMessage) {
 	if (imageMessage.length > 50) {
@@ -41,7 +42,8 @@ function checkMessage(message, imageMessage) {
 	else if (Botutils.regex.emoji.test(message)) {
 		cancelMessage(message, 'that message has emojis in! I can\'t handle those!!');
 		return;
-	} else {
+	}
+	else {
 		renderImage(message, imageMessage);
 	}
 
@@ -63,14 +65,14 @@ async function renderImage(message, imageMessage) {
 		backgroundImageURL,
 		fontColour,
 		soundClip,
-		randID
+		randID,
 	} = getRandData());
 	// create the canvas
 	const canvas = Canvas.createCanvas(640, 480);
 	const ctx = canvas.getContext('2d');
 	// calculate where the lines should split
 	({
-		lines
+		lines,
 	} = calculateLines(imageMessage, 72, 640, 480, 80));
 	// draw the background
 	const background = await Canvas.loadImage(backgroundImageURL);
@@ -113,7 +115,7 @@ function getRandData() {
 		backgroundImageURL,
 		fontColour,
 		soundClip,
-		randID
+		randID,
 	};
 }
 
@@ -125,7 +127,7 @@ function calculateLines(text, fontSize, canvasx, canvasy, paddingx) {
 	let width = 0,
 		i, j;
 	let result;
-	let lines = [];
+	const lines = [];
 
 	// Font and size is required for ctx.measureText()
 	ctx2.font = fontSize + 'px "Some Time Later"';
@@ -145,9 +147,9 @@ function calculateLines(text, fontSize, canvasx, canvasy, paddingx) {
 		width = Math.max(width, ctx2.measureText(lines[lines.length - 1]).width);
 		text = text.substr(lines[lines.length - 1].length, text.length);
 	}
-	for (var k = 0; k < lines.length; k++) {
+	for (let k = 0; k < lines.length; k++) {
 		lines[k].trim();
-	};
+	}
 	// return the lines array
 	return {
 		lines,
@@ -173,25 +175,25 @@ function makeVideo(imageData, message, soundClip, randID) {
 		.input(soundClip)
 		.inputOptions('-r 24')
 		// parameters are as such, size is 640x480, play for half a second at 30fps, fade in for 7 frames and add the soundclip
-		.on('end', function () {
+		.on('end', function() {
 			console.log('file has been converted succesfully');
 			ffmpeg('./videos/SpongebobIntro.mp4')
 				.setFfprobePath(ffprobePath)
 				.input('./cache/titlecard' + randID + '.mp4')
 				// after that, we merge with the original video
-				.on('end', function () {
+				.on('end', function() {
 					console.log('files have been merged succesfully');
 					message.channel.stopTyping();
 					message.channel.send({
-							files: [{
-								attachment: './cache/merged' + randID + '.mp4',
-								name: 'SpongebobIntro.mp4',
-							}],
-						})
+						files: [{
+							attachment: './cache/merged' + randID + '.mp4',
+							name: 'SpongebobIntro.mp4',
+						}],
+					})
 						.then(setTimeout(delayedCleanup, 5000, randID))
 						.catch(console.error);
 				})
-				.on('error', function (err) {
+				.on('error', function(err) {
 					console.log('an error happened: ' + err.message);
 					message.channel.stopTyping();
 					message.channel.send('OOPSIE WOOPSIE!! Uwu We made a fucky wucky!! A wittle fucko boingo!');
@@ -200,7 +202,7 @@ function makeVideo(imageData, message, soundClip, randID) {
 				})
 				.mergeToFile('./cache/merged' + randID + '.mp4');
 		})
-		.on('error', function (err) {
+		.on('error', function(err) {
 			console.log('Error: ' + err.message);
 			message.channel.stopTyping();
 			message.channel.send('OOPSIE WOOPSIE!! Uwu We made a fucky wucky!! A wittle fucko boingo!');
@@ -212,15 +214,15 @@ function makeVideo(imageData, message, soundClip, randID) {
 }
 
 function delayedCleanup(randID) {
-	const fs = require('fs');
 	try {
 		if (fs.existsSync('./cache/titlecard' + randID + '.png')) {
 			fs.unlink('./cache/titlecard' + randID + '.png', () => {
 				console.log('./cache/titlecard' + randID + '.png was deleted');
 			});
 		}
-	} catch (err) {
-		console.error(err)
+	}
+	catch (err) {
+		console.error(err);
 	}
 	try {
 		if (fs.existsSync('./cache/merged' + randID + '.mp4')) {
@@ -228,23 +230,25 @@ function delayedCleanup(randID) {
 				console.log('./cache/merged' + randID + '.mp4 was deleted');
 			});
 		}
-	} catch (err) {
-		console.error(err)
+	}
+	catch (err) {
+		console.error(err);
 	}
 	try {
 		if (fs.existsSync('./cache/titlecard' + randID + '.mp4')) {
-			fs.unlink('./cache/titlecard' + randID + '.mp4', (err) => {
+			fs.unlink('./cache/titlecard' + randID + '.mp4', () => {
 				console.log('./cache/titlecard' + randID + '.mp4 was deleted');
 			});
 		}
-	} catch (err) {
-		console.error(err)
+	}
+	catch (err) {
+		console.error(err);
 	}
 }
 
 module.exports.info = {
 	name: '!spongebob',
 	description: 'Generates a Spongebob version of text',
-	summon: '!spongebob [with optional text if you want a custom one]'
-}
-module.exports.regexp = '^!spongebob'
+	summon: '!spongebob [with optional text if you want a custom one]',
+};
+module.exports.regexp = '^!spongebob';

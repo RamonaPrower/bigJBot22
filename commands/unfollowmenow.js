@@ -5,12 +5,12 @@ const Discord = require('discord.js');
 const date = require('date-and-time');
 // exports
 module.exports = {
-    async execute(message) {
+	async execute(message) {
 		const { names } = cleanName(message);
-        const { dateTimeFin } = formatDate();
-        Canvas.registerFont('./fonts/SegoeUI.ttf', { family: 'Segoe UI',});
-        Canvas.registerFont('./fonts/SegoeUIBold.ttf', { family: 'Segoe UI', weight: 'bold' });
-        const canvas = Canvas.createCanvas(573, 331);
+		const { dateTimeFin } = formatDate();
+		Canvas.registerFont('./fonts/SegoeUI.ttf', { family: 'Segoe UI' });
+		Canvas.registerFont('./fonts/SegoeUIBold.ttf', { family: 'Segoe UI', weight: 'bold' });
+		const canvas = Canvas.createCanvas(573, 331);
 		const ctx = canvas.getContext('2d');
 		const background = await Canvas.loadImage('./images/unfollowme.png');
 		ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
@@ -32,8 +32,8 @@ module.exports = {
 		ctx.font = '14px "Segoe UI",Arial,sans-serif';
 		ctx.fillStyle = '#8899a6';
 		// username
-        ctx.fillText(`@${names[1]}`, 63, 52);
-        // date and time
+		ctx.fillText(`@${names[1]}`, 63, 52);
+		// date and time
 		ctx.fillText(dateTimeFin, 6, 228);
 
 		const attachment = new Discord.Attachment(canvas.toBuffer(), 'customunfollow.png');
@@ -44,8 +44,8 @@ module.exports = {
 		catch (error) {
 			console.error(error);
 		}
-         }
-}
+	},
+};
 
 function cleanName(message) {
 	const names = new Array();
@@ -71,8 +71,8 @@ function formatDate() {
 }
 
 module.exports.info = {
-    name: '!unfollowme',
-    description: 'Puts your user into the "unfollow me now" tweet from Tyler the Creator',
-    summon: 'type !unfollowme'
-}
-module.exports.regexp = '^!unfollowme$'
+	name: '!unfollowme',
+	description: 'Puts your user into the "unfollow me now" tweet from Tyler the Creator',
+	summon: 'type !unfollowme',
+};
+module.exports.regexp = '^!unfollowme$';
