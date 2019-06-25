@@ -1,13 +1,10 @@
 // imports
 const Canvas = require('canvas');
 const fs = require('fs');
-const ffprobePath = require('@ffprobe-installer/ffprobe').path;
-const ffmpeg = require('fluent-ffmpeg');
 const Botutils = require('../utils/botutils');
 const {
 	SpongebobImage,
 } = require('../utils/spongebobImagePicker');
-const spongebobData = require('../strings/spongebob.json');
 
 // exports
 module.exports = {
@@ -19,8 +16,7 @@ module.exports = {
 			splitMessage.shift();
 			const imageMessage = splitMessage.join(' ');
 			checkMessage(message, imageMessage);
-		}
-		else {
+		} else {
 			// this is when it's just the command, it'll skip back a message
 			message.channel.fetchMessages({
 					limit: 1,
@@ -44,8 +40,7 @@ function checkMessage(message, imageMessage) {
 	else if (Botutils.regex.emoji.test(message)) {
 		cancelMessage(message, 'that message has emojis in! I can\'t handle those!!');
 		return;
-	}
- else {
+	} else {
 		renderCreditsImage(message, imageMessage);
 	}
 
@@ -69,34 +64,28 @@ async function renderCreditsImage(message, imageMessage) {
 }
 
 async function renderTitleCardImage(message, imageMessage, SBimage) {
-	const lines = calculateLines(imageMessage, 72, 640, 480, 80);
+	const lines = calculateLines(imageMessage, 60, 640, 480, 75);
 	const titleImage = await SBimage.generateTitlecard(lines);
 	const out = fs.createWriteStream(SBimage.titlecardUri);
 	const stream = titleImage.createPNGStream();
 	await stream.pipe(out);
 	out.on('finish', () => renderTitleCardVideo(message, SBimage));
-	// out.on('finish', function() {
-	// 	message.channel.send({
-	// 		files: [{
-	// 			attachment: SBimage.titlecardUri,
-	// 			name: 'SpongebobTitle.png',
-	// 		}],
-	// 	});
-	// 	message.channel.stopTyping();
-	// });
 }
 
 async function renderTitleCardVideo(message, SBimage) {
-		const loadPromise = await SBimage.generateTitleVideo();
-		console.log(loadPromise);
-		// .then(() => {
-		// 	message.channel.send({
-		// 		files: [{
-		// 			attachment: SBimage.titleVideoUri,
-		// 			name: 'SpongebobIntro.mp4',
-		// 		}],
-		// 	});
-		// });
+	const titleUri = await SBimage.generateTitleVideo();
+	console.log(titleUri);
+	message.channel.send({
+		files: [{
+			attachment: titleUri,
+			name: 'SpongebobIntro.mp4',
+		}],
+	})
+	.then(setTimeout(() => {
+		SBimage.cleanup();
+	}, 5000));
+
+	message.channel.stopTyping();
 }
 
 function calculateLines(text, fontSize, canvasx, canvasy, paddingx) {

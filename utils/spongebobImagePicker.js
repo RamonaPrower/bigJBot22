@@ -1,6 +1,6 @@
 const Canvas = require('canvas');
+const fs = require('fs');
 const spongebobData = require('../strings/spongebob.json');
-const ffprobePath = require('@ffprobe-installer/ffprobe').path;
 const ffmpeg = require('fluent-ffmpeg');
 /**
  * New Spongebob Image Generator
@@ -19,6 +19,7 @@ class SpongebobImage {
 		this.creditsVideoUri = './cache/creditVideo' + this.rand + '.mp4';
 		this.titlecardUri = './cache/titlecard' + this.rand + '.png';
 		this.titleVideoUri = './cache/titlevideo' + this.rand + '.mp4';
+		this.mergedVideoUri = './cache/merged' + this.rand + '.mp4';
 		// this.imageType = 'dragonball';
 		this.imageType = this.findType();
 		this.backgroundImageURL = './images/spongebob/' + spongebobData.backgrounds[Math.round(Math.random() * (spongebobData.backgrounds.length - 1))];
@@ -82,13 +83,13 @@ class SpongebobImage {
 		const background = await Canvas.loadImage(this.backgroundImageURL);
 		ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
 		// render all the lines
-		ctx.font = '72px "Some Time Later"';
+		ctx.font = '60px "Some Time Later"';
 		ctx.fillStyle = this.fontColour;
 		ctx.textAlign = 'center';
 		ctx.shadowOffsetX = -3;
 		ctx.shadowOffsetY = 3;
 		ctx.shadowColor = '#000000';
-		renderLines(ctx, lines, 72);
+		renderLines(ctx, lines, 60);
 		return canvas;
 	}
 	async generateDragonballTitlecard(lines) {
@@ -105,21 +106,30 @@ class SpongebobImage {
 		});
 		const canvas = Canvas.createCanvas(640, 480);
 		const ctx = canvas.getContext('2d');
+		const background = await Canvas.loadImage(this.backgroundImageURL);
+		ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
 		// render all the lines
-		ctx.font = '72px "Final Frontier"';
+		ctx.font = '60px "Final Frontier"';
 		ctx.fillStyle = this.fontColour;
 		ctx.textAlign = 'center';
 		ctx.shadowOffsetX = -3;
 		ctx.shadowOffsetY = 3;
 		ctx.shadowColor = '#000000';
-		renderLines(ctx, lines, 72);
+		renderLines(ctx, lines, 60);
 		const balls = await Canvas.loadImage('./images/spongebob/dragonball.png');
 		ctx.drawImage(balls, 0, 0, canvas.width, canvas.height);
 		return canvas;
 	}
 	async generateTitleVideo() {
-				await this.generateSpongebobTitleVideo();
-				return this.titleVideoUri;
+		if (this.imageType === 'dragonball') {
+			await this.generateDragonballTitleVideo();
+		}
+		else {
+			await this.generateSpongebobTitleVideo();
+		}
+		await this.generateSpongebobCreditVideo();
+		await this.combineVideos();
+		return this.mergedVideoUri;
 		}
 	generateSpongebobTitleVideo() {
 		return new Promise((resolve, reject) => {
@@ -132,29 +142,104 @@ class SpongebobImage {
 			.input(this.soundClip)
 			.inputOptions('-r 24')
 			.format('mp4')
-			.on('end', () => {resolve();})
-			.on('error', function(err) {reject(err);})
+			.on('end', resolve)
+			.on('error', reject)
 			.save(this.titleVideoUri);
 		});
 	}
-	async generateSpongebobCreditVideo() {
+	generateSpongebobCreditVideo() {
 		return new Promise((resolve, reject) => {
 			ffmpeg()
 			.input(this.creditsCardUri)
 			.size('640x480')
 			.loop(2.3)
 			.fps(30)
-			.videoFilters('fade=out:53:58')
-			.inputOptions('-r 24')
-			.input('./audio/spongebobcredit.ogg')
+			.videoFilters('fade=out:46:5')
+			.input('./audio/spongebob/spongebobcredit.ogg')
 			.format('mp4')
-			.on('end', resolve())
-			.on('error', function(err) {reject(err);})
-			.save(this.creditVideoUri);
+			.on('end', resolve)
+			.on('error', reject)
+			.save(this.creditsVideoUri);
 		});
 	}
 	async generateDragonballTitleVideo() {
-
+		return new Promise((resolve, reject) => {
+			ffmpeg()
+			.input(this.titlecardUri)
+			.size('640x480')
+			.loop(6)
+			.fps(30)
+			.videoFilters('fade=in:0:7')
+			.input('./audio/spongebob/dragonball.mp3')
+			.format('mp4')
+			.on('end', resolve)
+			.on('error', reject)
+			.save(this.titleVideoUri);
+		});
+	}
+	combineVideos() {
+		return new Promise((resolve, reject) => {
+			ffmpeg()
+			.input('./videos/spongebobIntroNoCredit.mp4')
+			.input(this.creditsVideoUri)
+			.input(this.titleVideoUri)
+			.format('mp4')
+			.on('end', resolve)
+			.on('error', reject)
+			.mergeToFile(this.mergedVideoUri, '../cache/');
+		});
+	}
+	cleanup() {
+		try {
+			if (fs.existsSync(this.creditsCardUri)) {
+				fs.unlink(this.creditsCardUri, () => {
+					console.log(`${this.creditsCardUri} was deleted`);
+				});
+			}
+		}
+		catch (err) {
+			console.error(err);
+		}
+		try {
+			if (fs.existsSync(this.creditsVideoUri)) {
+				fs.unlink(this.creditsVideoUri, () => {
+					console.log(`${this.creditsVideoUri} was deleted`);
+				});
+			}
+		}
+		catch (err) {
+			console.error(err);
+		}
+		try {
+			if (fs.existsSync(this.titlecardUri)) {
+				fs.unlink(this.titlecardUri, () => {
+					console.log(`${this.titlecardUri} was deleted`);
+				});
+			}
+		}
+		catch (err) {
+			console.error(err);
+		}
+		try {
+			if (fs.existsSync(this.titleVideoUri)) {
+				fs.unlink(this.titleVideoUri, () => {
+					console.log(`${this.titleVideoUri} was deleted`);
+				});
+			}
+		}
+		catch (err) {
+			console.error(err);
+		}
+		try {
+			if (fs.existsSync(this.mergedVideoUri)) {
+				fs.unlink(this.mergedVideoUri, () => {
+					console.log(`${this.mergedVideoUri} was deleted`);
+				});
+			}
+		}
+		catch (err) {
+			console.error(err);
+		}
 	}
 }
 
