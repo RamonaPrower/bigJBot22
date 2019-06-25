@@ -5,7 +5,6 @@ const ffprobePath = require('@ffprobe-installer/ffprobe').path;
 const ffmpeg = require('fluent-ffmpeg');
 const Botutils = require('../utils/botutils');
 const spongebobData = require('../strings/spongebob.json');
-const config = require('../config.json');
 
 // exports
 module.exports = {
@@ -251,4 +250,4 @@ module.exports.info = {
 	description: 'Generates a Spongebob version of text',
 	summon: '!spongebob [with optional text if you want a custom one]',
 };
-module.exports.regexp = '^!spongebob';
+module.exports.regexp = '^!spongebobold';
