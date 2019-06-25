@@ -162,7 +162,7 @@ class SpongebobImage {
 			.save(this.creditsVideoUri);
 		});
 	}
-	async generateDragonballTitleVideo() {
+	generateDragonballTitleVideo() {
 		return new Promise((resolve, reject) => {
 			ffmpeg()
 			.input(this.titlecardUri)
