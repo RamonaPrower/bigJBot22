@@ -1,10 +1,10 @@
 // imports
 const Canvas = require('canvas');
 const fs = require('fs');
-const ffprobePath = require('@ffprobe-installer/ffprobe').path;
-const ffmpeg = require('fluent-ffmpeg');
 const Botutils = require('../utils/botutils');
-const spongebobData = require('../strings/spongebob.json');
+const {
+	SpongebobImage,
+} = require('../utils/spongebobImagePicker');
 
 // exports
 module.exports = {
@@ -20,9 +20,9 @@ module.exports = {
 		else {
 			// this is when it's just the command, it'll skip back a message
 			message.channel.fetchMessages({
-				limit: 1,
-				before: message.id,
-			})
+					limit: 1,
+					before: message.id,
+				})
 				.then(async messages => {
 					const lastMessage = await messages.first();
 					const imageMessage = lastMessage.content;
@@ -42,8 +42,8 @@ function checkMessage(message, imageMessage) {
 		cancelMessage(message, 'that message has emojis in! I can\'t handle those!!');
 		return;
 	}
-	else {
-		renderImage(message, imageMessage);
+ else {
+		renderCreditsImage(message, imageMessage);
 	}
 
 }
@@ -54,68 +54,40 @@ function cancelMessage(message, errmessage) {
 	return;
 }
 
-async function renderImage(message, imageMessage) {
+async function renderCreditsImage(message, imageMessage) {
 	// register font
-	Canvas.registerFont('./fonts/sometimelater.otf', {
-		family: 'Some Time Later',
-	});
-	// pick image and font colour
-	({
-		backgroundImageURL,
-		fontColour,
-		soundClip,
-		randID,
-	} = getRandData());
-	// create the canvas
-	const canvas = Canvas.createCanvas(640, 480);
-	const ctx = canvas.getContext('2d');
-	// calculate where the lines should split
-	({
-		lines,
-	} = calculateLines(imageMessage, 72, 640, 480, 80));
-	// draw the background
-	const background = await Canvas.loadImage(backgroundImageURL);
-	ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
-	// render all the lines
-	ctx.font = '72px "Some Time Later"';
-	ctx.fillStyle = fontColour;
-	ctx.textAlign = 'center';
-	ctx.shadowOffsetX = -3;
-	ctx.shadowOffsetY = 3;
-	ctx.shadowColor = '#000000';
-	renderLines(ctx, lines, 72);
-	console.log('i am starting to make the image');
-	const out = fs.createWriteStream('./cache/titlecard' + randID + '.png');
-	const stream = canvas.createPNGStream();
+	const SBimage = new SpongebobImage(message.member.displayName, imageMessage);
+	const creditCanvas = await SBimage.generateCredits();
+	const out = fs.createWriteStream(SBimage.creditsCardUri);
+	const stream = creditCanvas.createPNGStream();
 	await stream.pipe(out);
 	// after the image is finished and saved
-	out.on('finish', () => makeVideo('./cache/titlecard' + randID + '.png', message, soundClip, randID));
-	// out.on('finish', function() {
-	// 	message.channel.send({
-	// 		files: [{
-	// 			attachment: './cache/titlecard' + randID + '.png',
-	// 			name: 'SpongebobIntro.png',
-	// 		}],
-	// 	});
-	// });
+	out.on('finish', () => renderTitleCardImage(message, imageMessage, SBimage));
 }
 
-function getRandData() {
-	// get random background image
-	const backgroundImageURL = './images/spongebob/' + spongebobData.backgrounds[Math.round(Math.random() * (spongebobData.backgrounds.length - 1))];
-	// get random font colour
-	const fontColour = spongebobData.fontColour[Math.round(Math.random() * (spongebobData.fontColour.length - 1))];
-	// get random sound
-	const soundClip = './audio/spongebob/' + spongebobData.soundClip[Math.round(Math.random() * (spongebobData.soundClip.length - 1))];
-	// get random ID
-	const randID = Math.round(Math.random() * 1000);
-	// output backgroundImageURL + fontColour + soundClip + id
-	return {
-		backgroundImageURL,
-		fontColour,
-		soundClip,
-		randID,
-	};
+async function renderTitleCardImage(message, imageMessage, SBimage) {
+	const lines = calculateLines(imageMessage, 60, 640, 480, 75);
+	const titleImage = await SBimage.generateTitlecard(lines);
+	const out = fs.createWriteStream(SBimage.titlecardUri);
+	const stream = titleImage.createPNGStream();
+	await stream.pipe(out);
+	out.on('finish', () => renderTitleCardVideo(message, SBimage));
+}
+
+async function renderTitleCardVideo(message, SBimage) {
+	const titleUri = await SBimage.generateTitleVideo();
+	console.log(titleUri);
+	message.channel.send({
+		files: [{
+			attachment: titleUri,
+			name: 'SpongebobIntro.mp4',
+		}],
+	})
+	.then(setTimeout(() => {
+		SBimage.cleanup();
+	}, 5000));
+
+	message.channel.stopTyping();
 }
 
 function calculateLines(text, fontSize, canvasx, canvasy, paddingx) {
@@ -150,99 +122,7 @@ function calculateLines(text, fontSize, canvasx, canvasy, paddingx) {
 		lines[k].trim();
 	}
 	// return the lines array
-	return {
-		lines,
-	};
-}
-
-function renderLines(ctx, lines, fontSize) {
-	const lineOffset = lines.length * (fontSize / 2);
-	for (let i = 0, j = lines.length; i < j; ++i) {
-		//  ok so this line is a doozy
-		// it's baseHeight - offset, then add a lineHeight times position, then add 2/3rds font size to get it equal
-		ctx.fillText(lines[i], 320, ((240 - lineOffset) + ((fontSize * i) + 5)) + (fontSize / 1.5));
-	}
-}
-
-function makeVideo(imageData, message, soundClip, randID) {
-	console.log('i am starting to make the video');
-	ffmpeg(imageData)
-		.size('640x480')
-		.loop(1.5)
-		.fps(30)
-		.videoFilters('fade=in:0:7')
-		.input(soundClip)
-		.inputOptions('-r 24')
-		// parameters are as such, size is 640x480, play for half a second at 30fps, fade in for 7 frames and add the soundclip
-		.on('end', function() {
-			console.log('file has been converted succesfully');
-			ffmpeg('./videos/SpongebobIntro.mp4')
-				.setFfprobePath(ffprobePath)
-				.input('./cache/titlecard' + randID + '.mp4')
-				// after that, we merge with the original video
-				.on('end', function() {
-					console.log('files have been merged succesfully');
-					message.channel.stopTyping();
-					message.channel.send({
-						files: [{
-							attachment: './cache/merged' + randID + '.mp4',
-							name: 'SpongebobIntro.mp4',
-						}],
-					})
-						.then(setTimeout(delayedCleanup, 5000, randID))
-						.catch(console.error);
-				})
-				.on('error', function(err) {
-					console.log('an error happened: ' + err.message);
-					message.channel.stopTyping();
-					message.channel.send('OOPSIE WOOPSIE!! Uwu We made a fucky wucky!! A wittle fucko boingo!');
-					delayedCleanup(randID);
-					return;
-				})
-				.mergeToFile('./cache/merged' + randID + '.mp4');
-		})
-		.on('error', function(err) {
-			console.log('Error: ' + err.message);
-			message.channel.stopTyping();
-			message.channel.send('OOPSIE WOOPSIE!! Uwu We made a fucky wucky!! A wittle fucko boingo!');
-			delayedCleanup(randID);
-			return;
-		})
-		.format('mp4')
-		.save('./cache/titlecard' + randID + '.mp4');
-}
-
-function delayedCleanup(randID) {
-	try {
-		if (fs.existsSync('./cache/titlecard' + randID + '.png')) {
-			fs.unlink('./cache/titlecard' + randID + '.png', () => {
-				console.log('./cache/titlecard' + randID + '.png was deleted');
-			});
-		}
-	}
-	catch (err) {
-		console.error(err);
-	}
-	try {
-		if (fs.existsSync('./cache/merged' + randID + '.mp4')) {
-			fs.unlink('./cache/merged' + randID + '.mp4', () => {
-				console.log('./cache/merged' + randID + '.mp4 was deleted');
-			});
-		}
-	}
-	catch (err) {
-		console.error(err);
-	}
-	try {
-		if (fs.existsSync('./cache/titlecard' + randID + '.mp4')) {
-			fs.unlink('./cache/titlecard' + randID + '.mp4', () => {
-				console.log('./cache/titlecard' + randID + '.mp4 was deleted');
-			});
-		}
-	}
-	catch (err) {
-		console.error(err);
-	}
+	return lines;
 }
 
 module.exports.info = {
@@ -250,4 +130,4 @@ module.exports.info = {
 	description: 'Generates a Spongebob version of text',
 	summon: '!spongebob [with optional text if you want a custom one]',
 };
-module.exports.regexp = '^!spongebobold';
+module.exports.regexp = /^!spongebob/mi;

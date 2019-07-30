@@ -12,16 +12,16 @@ module.exports = {
         const ctx = canvas.getContext('2d');
         const background = await Canvas.loadImage('./images/beans.png');
         ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
-        ctx.font = 'bold 10px "Helvetica"'
+        ctx.font = 'bold 10px "Helvetica"';
         const nameLength = ctx.measureText(shortname).width;
         ctx.fillStyle = '#45619d';
         ctx.fillText(`${shortname}`, 50, 26);
         const {
-            body: buffer
+            body: buffer,
         } = await snekfetch.get(message.member.user.displayAvatarURL);
         const avatar = await Canvas.loadImage(buffer);
         ctx.drawImage(avatar, 14, 15, 30, 30);
-        const beansEnd = await Canvas.loadImage('./images/beanstag.png')
+        const beansEnd = await Canvas.loadImage('./images/beanstag.png');
         ctx.drawImage(beansEnd, 50 + nameLength + 5, 18, 79, 9);
         const canvas2 = Canvas.createCanvas(768, 288);
         const ctx2 = canvas2.getContext('2d');
@@ -30,15 +30,16 @@ module.exports = {
         message.channel.send(attachment);
         try {
             message.delete();
-        } catch (error) {
+        }
+ catch (error) {
             console.error(error);
         }
-    }
+    },
 
-}
+};
 module.exports.info = {
     name: 'thinkin about thos beans',
     description: 'For when the beans are being thought about',
-    summon: '!thosbeans or "thinkin about thos beans"'
-}
-module.exports.regexp = '^(!thosbeans|thinkin about thos beans)'
+    summon: '!thosbeans or "thinkin about thos beans"',
+};
+module.exports.regexp = /^(!thosbeans|thinkin about thos beans)/mi;

@@ -14,21 +14,21 @@ module.exports = {
         const attachment = new Discord.Attachment(canvas.toBuffer(), 'location.png');
         console.log(subject);
         message.channel.send(attachment);
-    }
-}
+    },
+};
 
 function messageHandler(message) {
     let subject = message.cleanContent;
-    subject = subject.replace(/(!location\s+|\s+(wants to|would like to) know your location$)/gmi, "")
-    subject = subject.replace(/^@/gmi, "")
+    subject = subject.replace(/(!location\s+|\s+(wants to|would like to) know your location$)/gmi, '');
+    subject = subject.replace(/^@/gmi, '');
     subject = subject.substring(0, 32);
-    subject += " wants to:";
+    subject += ' wants to:';
     return subject;
-};
+}
 
 module.exports.info = {
     name: '!location',
     description: 'for when something or someone wants to know your location',
-    summon: '!location [INPUT] or [INPUT] wants to/would like to know your location'
-}
-module.exports.regexp = '(!location .+|.+ (wants to|would like to) know your location$)'
+    summon: '!location [INPUT] or [INPUT] wants to/would like to know your location',
+};
+module.exports.regexp = /(!location .+|.+ (wants to|would like to) know your location$)/mi;

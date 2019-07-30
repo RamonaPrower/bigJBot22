@@ -19,7 +19,6 @@ module.exports = {
             ctx.drawImage(avatar, 8, 4, 50, 50);
             ctx.font = 'bold 18px "Trebuchet MS", sans-serif';
             const nameLength = ctx.measureText(`${shortname}21`).width;
-            console.log(nameLength);
             ctx.fillStyle = '#337287';
             ctx.fillText(`${shortname}21`, 86, 32);
             ctx.font = '11px "Verdana", sans-serif';
@@ -46,4 +45,4 @@ module.exports.info = {
     description: 'For when you want to get into the boots of BigJB21',
     summon: 'saying "god i wish that was/were me", also via !god',
 };
-module.exports.regexp = '(^!god|^god i wish that (were|was) me($| $))';
+module.exports.regexp = /(^!god|^god i wish that (were|was) me($| $))/mi;

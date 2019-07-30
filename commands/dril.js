@@ -137,4 +137,4 @@ module.exports.info = {
 	description: 'Generates a dril tweet based on a new or last message',
 	summon: '!dril [optional text here if you want a custom message]',
 };
-module.exports.regexp = '^!dril($| )';
+module.exports.regexp = /^!dril($| )/mi;

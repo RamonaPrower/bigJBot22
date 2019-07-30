@@ -75,4 +75,4 @@ module.exports.info = {
 	description: 'Puts your user into the "unfollow me now" tweet from Tyler the Creator',
 	summon: 'type !unfollowme',
 };
-module.exports.regexp = '^!unfollowme$';
+module.exports.regexp = /^!unfollowme$/mi;

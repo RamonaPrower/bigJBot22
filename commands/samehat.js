@@ -24,8 +24,8 @@ module.exports = {
 		}
 		// create same hat image with rounded borders
 		// catch errors
-         }
-}
+         },
+};
 
 async function callHat(message, otherHat) {
 	const canvas = Canvas.createCanvas(471, 361);
@@ -54,6 +54,6 @@ async function callHat(message, otherHat) {
 module.exports.info = {
     name: '!samehat',
     description: 'Show someone that same hat feeling',
-    summon: '!samehat [optional:Tag someone]'
-}
-module.exports.regexp = '^!samehat($| )'
+    summon: '!samehat [optional:Tag someone]',
+};
+module.exports.regexp = /^!samehat($| )/mi;

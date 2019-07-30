@@ -12,11 +12,11 @@ module.exports = {
 		else {
 			return;
 		}
-         }
-}
+         },
+};
 module.exports.info = {
     name: 'Yiff!',
     description: 'Occasionally Yiffs at you',
-    summon: 'Responds to people saying "Yiff" a bunch'
-}
-module.exports.regexp = '^yiff(.{1,3})?'
+    summon: 'Responds to people saying "Yiff" a bunch',
+},
+module.exports.regexp = /^yiff(.{1,3})?/mi;

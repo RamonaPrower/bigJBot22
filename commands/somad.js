@@ -27,11 +27,11 @@ module.exports = {
 		catch (error) {
 			console.error(error);
 		}
-         }
-}
+         },
+};
 module.exports.info = {
     name: '!somad',
     description: 'Generate a Image related to the "Tip: i am so fucking mad" meme',
-    summon: 'type !somad'
-}
-module.exports.regexp = '^!somad'
+    summon: 'type !somad',
+};
+module.exports.regexp = /^!somad/mi;
