@@ -77,16 +77,23 @@ async function renderTitleCardImage(message, imageMessage, SBimage) {
 async function renderTitleCardVideo(message, SBimage) {
 	const titleUri = await SBimage.generateTitleVideo();
 	console.log(titleUri);
-	message.channel.send({
-		files: [{
-			attachment: titleUri,
-			name: 'SpongebobIntro.mp4',
-		}],
-	})
-	.then(setTimeout(() => {
-		SBimage.cleanup();
-	}, 5000));
-
+	if (!titleUri) {
+		message.channel.send('Oops. I have broken again. Please ask Colgate to fix me.')
+		.then(setTimeout(() => {
+			SBimage.cleanup();
+		}, 5000));
+	}
+	else {
+		message.channel.send({
+			files: [{
+				attachment: titleUri,
+				name: 'SpongebobIntro.mp4',
+			}],
+		})
+		.then(setTimeout(() => {
+			SBimage.cleanup();
+		}, 5000));
+	}
 	message.channel.stopTyping();
 }
 

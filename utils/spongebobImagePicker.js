@@ -121,15 +121,21 @@ class SpongebobImage {
 		return canvas;
 	}
 	async generateTitleVideo() {
-		if (this.imageType === 'dragonball') {
-			await this.generateDragonballTitleVideo();
+
+		try {
+			if (this.imageType === 'dragonball') {
+				await this.generateDragonballTitleVideo();
+			}
+			else {
+				await this.generateSpongebobTitleVideo();
+			}
+			await this.generateSpongebobCreditVideo();
+			await this.combineVideos();
+			return this.mergedVideoUri;
 		}
-		else {
-			await this.generateSpongebobTitleVideo();
+		catch (err) {
+			return false;
 		}
-		await this.generateSpongebobCreditVideo();
-		await this.combineVideos();
-		return this.mergedVideoUri;
 		}
 	generateSpongebobTitleVideo() {
 		return new Promise((resolve, reject) => {
