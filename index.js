@@ -45,7 +45,6 @@ client.on('messageReactionAdd', messageReaction => {
 
 client.on('error', data => {
 	console.error('Connection Error', data.message);
-	autoRestartServer();
 });
 
 client.on('disconnect', data => {
