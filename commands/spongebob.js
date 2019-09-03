@@ -78,6 +78,7 @@ async function renderTitleCardVideo(message, SBimage) {
 	const titleUri = await SBimage.generateTitleVideo();
 	console.log(titleUri);
 	if (!titleUri) {
+		console.log(SBimage.error);
 		message.channel.send('Oops. I have broken again. Please ask Colgate to fix me.')
 		.then(setTimeout(() => {
 			SBimage.cleanup();

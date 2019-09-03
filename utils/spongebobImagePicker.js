@@ -14,6 +14,7 @@ class SpongebobImage {
 	constructor(user, message) {
 		this.user = user;
 		this.message = message;
+		this.error;
 		this.rand = Math.round(Math.random() * 1000);
 		this.creditsCardUri = './cache/creditcard' + this.rand + '.png';
 		this.creditsVideoUri = './cache/creditVideo' + this.rand + '.mp4';
@@ -134,6 +135,7 @@ class SpongebobImage {
 			return this.mergedVideoUri;
 		}
 		catch (err) {
+			this.error = err;
 			return false;
 		}
 		}
