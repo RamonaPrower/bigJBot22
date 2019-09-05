@@ -4,10 +4,10 @@
   "description": "Rewrite of BigJB21",
   "main": "index.js",
   "dependencies": {
-    "@ffprobe-installer/ffprobe": "^1.0.10",
-    "canvas": "^2.4.1",
+    "@ffprobe-installer/ffprobe": "^1.0.12",
+    "canvas": "^2.6.0",
     "date-and-time": "^0.6.3",
-    "discord.js": "^11.4.2",
+    "discord.js": "^11.5.1",
     "fluent-ffmpeg": "^2.1.2"
   },
   "scripts": {
