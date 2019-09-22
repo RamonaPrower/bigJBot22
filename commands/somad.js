@@ -1,7 +1,7 @@
 // imports
 const Canvas = require('canvas');
-const snekfetch = require('snekfetch');
 const Discord = require('discord.js');
+const getAvatar = require('../utils/avatarCheck');
 // exports
 module.exports = {
     async execute(message) {
@@ -10,9 +10,7 @@ module.exports = {
 		const ctx = canvas.getContext('2d');
 		const background = await Canvas.loadImage('./images/somad.png');
 		ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
-		const {
-			body: buffer,
-		} = await snekfetch.get(message.member.user.displayAvatarURL);
+		const buffer = await getAvatar(message.member.user.displayAvatarURL);
 		const avatar = await Canvas.loadImage(buffer);
 		ctx.drawImage(avatar, 200, 9, 50, 50);
 		const canvas2 = Canvas.createCanvas(510, 136);

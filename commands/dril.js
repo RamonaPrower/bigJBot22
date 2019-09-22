@@ -93,22 +93,23 @@ function doStuffToFont(text, fontSize, lines) {
 	const max_width = 560;
 	let width = 0, i, j;
 	let result;
-
+	let nlText = text.split(/\r\n|\r|\n/).join(' ');
 	// Font and size is required for ctx.measureText()
 	ctx2.font = fontSize + 'px "Segoe UI",Arial,sans-serif';
 
 
 	// Start calculation
-	while (text.length) {
-		for(i = text.length; ctx2.measureText(text.substr(0, i)).width > max_width; i--);
+	while (nlText.length) {
+		//
+		for(i = nlText.length; ctx2.measureText(nlText.substr(0, i)).width > max_width; i--);
 
-		result = text.substr(0, i);
+		result = nlText.substr(0, i);
 
-		if (i !== text.length) {for(j = 0; result.indexOf(' ', j) !== -1; j = result.indexOf(' ', j) + 1);}
+		if (i !== nlText.length) {for(j = 0; result.indexOf(' ', j) !== -1; j = result.indexOf(' ', j) + 1);}
 
 		lines.push(result.substr(0, j || result.length));
 		width = Math.max(width, ctx2.measureText(lines[ lines.length - 1 ]).width);
-		text = text.substr(lines[ lines.length - 1 ].length, text.length);
+		nlText = nlText.substr(lines[ lines.length - 1 ].length, nlText.length);
 	}
 
 

@@ -8,10 +8,9 @@
     "canvas": "^2.6.0",
     "date-and-time": "^0.6.3",
     "discord.js": "^11.5.1",
-    "fluent-ffmpeg": "^2.1.2"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "fluent-ffmpeg": "^2.1.2",
+    "gif-frames": "^1.0.1",
+    "node-fetch": "^2.6.0"
   },
   "author": "Ramona Prower",
   "license": "ISC"
