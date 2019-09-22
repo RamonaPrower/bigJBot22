@@ -1,6 +1,6 @@
 // imports
 const Canvas = require('canvas');
-const snekfetch = require('snekfetch');
+const getAvatar = require('../utils/avatarCheck');
 const Discord = require('discord.js');
 
 // exports
@@ -16,9 +16,7 @@ module.exports = {
         const nameLength = ctx.measureText(shortname).width;
         ctx.fillStyle = '#45619d';
         ctx.fillText(`${shortname}`, 50, 26);
-        const {
-            body: buffer,
-        } = await snekfetch.get(message.member.user.displayAvatarURL);
+        const buffer = await getAvatar(message.member.user.displayAvatarURL);
         const avatar = await Canvas.loadImage(buffer);
         ctx.drawImage(avatar, 14, 15, 30, 30);
         const beansEnd = await Canvas.loadImage('./images/beanstag.png');

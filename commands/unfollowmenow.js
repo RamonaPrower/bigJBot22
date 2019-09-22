@@ -1,6 +1,6 @@
 // imports
 const Canvas = require('canvas');
-const snekfetch = require('snekfetch');
+const getAvatar = require('../utils/avatarCheck');
 const Discord = require('discord.js');
 const date = require('date-and-time');
 // exports
@@ -19,9 +19,7 @@ module.exports = {
 		ctx.arc(30, 35, 24, 0, Math.PI * 2);
 		ctx.closePath();
 		ctx.clip();
-		const {
-			body: buffer,
-		} = await snekfetch.get(message.member.user.displayAvatarURL);
+		const buffer = await getAvatar(message.member.user.displayAvatarURL);
 		const avatar = await Canvas.loadImage(buffer);
 		ctx.drawImage(avatar, 6, 11, 48, 48);
 		ctx.restore();

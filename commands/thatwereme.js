@@ -1,6 +1,6 @@
 // imports
 const Canvas = require('canvas');
-const snekfetch = require('snekfetch');
+const getAvatar = require('../utils/avatarCheck');
 const Discord = require('discord.js');
 const date = require('date-and-time');
 // exports
@@ -14,7 +14,7 @@ module.exports = {
             const ctx = canvas.getContext('2d');
             const background = await Canvas.loadImage('./images/godiwishbackground.png');
             ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
-            const { body: buffer } = await snekfetch.get(message.member.user.displayAvatarURL);
+            const buffer = await getAvatar(message.member.user.displayAvatarURL);
             const avatar = await Canvas.loadImage(buffer);
             ctx.drawImage(avatar, 8, 4, 50, 50);
             ctx.font = 'bold 18px "Trebuchet MS", sans-serif';
