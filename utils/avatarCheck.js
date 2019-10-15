@@ -20,6 +20,8 @@ module.exports = async function(url) {
             frames: 0,
             culmative: true,
         });
+        // this isn't the good way, but getImage returns a stream, when the buffer (which is needed) is right there in a private var
+        // if it does get busted, fork gif-frames with the buffer option, and PR, if not, add it as a new util
         buffer = buffer[0].getImage()._obj;
     }
 
