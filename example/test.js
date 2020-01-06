@@ -12,4 +12,4 @@ module.exports.info = {
     description: 'Template Message',
     summon: 'Template Summon Info',
 };
-module.exports.regexp = '^!test';
+module.exports.regexp = /^!test/mi;

@@ -34,7 +34,7 @@ async function applyReaction(foundMessage) {
 }
 
 module.exports.info = {
-    name: 'Get Link',
+    name: 'nice',
     description: 'Get Link',
     summon: 'Post a discord message link',
 };
