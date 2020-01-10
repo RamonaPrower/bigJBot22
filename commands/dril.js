@@ -54,12 +54,13 @@ function cancelMessage(message, errmessage) {
 async function renderImage(message, tweetMessage) {
 	// register the font to the system
 	Canvas.registerFont('./fonts/SegoeUI.ttf', { family: 'Segoe UI' });
-	// lines needs to be pushed to, so we set it up beforehand
-	let lines = [];
-	let canvasWidth = 0;
-	let canvasHeight = 0;
 	// calculates the canvas size based on the lines
-	({ canvasWidth, canvasHeight, lines } = doStuffToFont(tweetMessage, 27, lines));
+	const { canvasWidth, canvasHeight, lines } = doStuffToFont(tweetMessage, 27);
+	if (lines.length === 0) {
+		message.channel.stopTyping();
+		message.channel.send('no');
+		return;
+	}
 	// summon the date and time
 	const { dateTimeFin } = formatDate();
 	// create the canvas based on calcs, and fill with dark twitter thing
@@ -86,31 +87,37 @@ async function renderImage(message, tweetMessage) {
 
 }
 
-function doStuffToFont(text, fontSize, lines) {
+function doStuffToFont(text, fontSize) {
 	// create dummy canvas and put variables in the place
 	const canvas2 = Canvas.createCanvas(631, 560);
 	const ctx2 = canvas2.getContext('2d');
 	const max_width = 560;
-	let width = 0, i, j;
+	const lines = [];
 	let result;
-	let nlText = text.split(/\r\n|\r|\n/).join(' ');
+	const nlText = text.split(/\r\n|\r|\n/).join(' ');
+	let tokens = nlText.split(' ');
 	// Font and size is required for ctx.measureText()
 	ctx2.font = fontSize + 'px "Segoe UI",Arial,sans-serif';
 
 
 	// Start calculation
-	while (nlText.length) {
-		//
-		for(i = nlText.length; ctx2.measureText(nlText.substr(0, i)).width > max_width; i--);
-
-		result = nlText.substr(0, i);
-
-		if (i !== nlText.length) {for(j = 0; result.indexOf(' ', j) !== -1; j = result.indexOf(' ', j) + 1);}
-
-		lines.push(result.substr(0, j || result.length));
-		width = Math.max(width, ctx2.measureText(lines[ lines.length - 1 ]).width);
-		nlText = nlText.substr(lines[ lines.length - 1 ].length, nlText.length);
-	}
+	while (tokens.length > 0) {
+		let width = 0, i;
+        for(i = tokens.length; i > 0; i--) {
+          width = ctx2.measureText(tokens.slice(0, i).join(' ')).width;
+          if (width <= max_width) {
+            break;
+          }
+        }
+		if (i == 0) {
+			return { lines };
+		}
+		result = tokens.slice(0, i).join(' ');
+		lines.push(result);
+		width = Math.max(width, ctx2.measureText(result).width);
+		tokens = tokens.slice(i);
+        
+    }
 
 
 	// Calculate canvas size, add margin
