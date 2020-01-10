@@ -5,12 +5,15 @@
   "main": "index.js",
   "dependencies": {
     "@ffprobe-installer/ffprobe": "^1.0.12",
+    "bufferutil": "^4.0.1",
     "canvas": "^2.6.0",
     "date-and-time": "^0.6.3",
     "discord.js": "^11.5.1",
     "fluent-ffmpeg": "^2.1.2",
     "gif-frames": "^1.0.1",
-    "node-fetch": "^2.6.0"
+    "libsodium-wrappers": "^0.7.6",
+    "node-fetch": "^2.6.0",
+    "opusscript": "0.0.7"
   },
   "author": "Ramona Prower",
   "license": "ISC"
