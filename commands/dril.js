@@ -128,7 +128,7 @@ function renderFont(ctx, lines, fontSize) {
 
 function formatDate() {
 	const now = new Date();
-	const timeRaw = date.format(now, 'h:m A');
+	const timeRaw = date.format(now, 'h:mm A');
 	const timeBig = timeRaw.toUpperCase();
 	const dateTimeFin = `${timeBig} - ${date.format(now, 'D MMM YYYY')}`;
 	return { dateTimeFin };
