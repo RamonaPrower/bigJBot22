@@ -1,5 +1,4 @@
 // imports
-const Canvas = require('canvas');
 const fs = require('fs');
 const Botutils = require('../utils/botutils');
 const {
@@ -33,12 +32,12 @@ module.exports = {
 };
 
 function checkMessage(message, imageMessage) {
-	if (imageMessage.length > 50) {
-		cancelMessage(message, 'that message is too long! 50 characters or less, b-baka!');
+	if (imageMessage.length > 1516) {
+		cancelMessage(message, 'that message is too long! 1516 characters or less, b-baka!');
 		return;
 	}
 	// this checks for custom emojis from Botutils
-	else if (Botutils.regex.emoji.test(message)) {
+	else if (Botutils.emoji.test(message)) {
 		cancelMessage(message, 'that message has emojis in! I can\'t handle those!!');
 		return;
 	}
@@ -66,8 +65,8 @@ async function renderCreditsImage(message, imageMessage) {
 }
 
 async function renderTitleCardImage(message, imageMessage, SBimage) {
-	const lines = calculateLines(imageMessage, 60, 640, 480, 75);
-	const titleImage = await SBimage.generateTitlecard(lines);
+	// const lines = calculateLines(imageMessage, 60, 640, 480, 75);
+	const titleImage = await SBimage.generateTitlecard(imageMessage);
 	const out = fs.createWriteStream(SBimage.titlecardUri);
 	const stream = titleImage.createPNGStream();
 	await stream.pipe(out);
@@ -96,41 +95,6 @@ async function renderTitleCardVideo(message, SBimage) {
 		}, 5000));
 	}
 	message.channel.stopTyping();
-}
-
-function calculateLines(text, fontSize, canvasx, canvasy, paddingx) {
-	// create dummy canvas and put variables in the place
-	const canvas2 = Canvas.createCanvas(canvasx, canvasy);
-	const ctx2 = canvas2.getContext('2d');
-	const max_width = canvasx - paddingx;
-	let width = 0,
-		i, j;
-	let result;
-	const lines = [];
-
-	// Font and size is required for ctx.measureText()
-	ctx2.font = fontSize + 'px "Some Time Later"';
-
-
-	// Start calculation
-	while (text.length) {
-		for (i = text.length; ctx2.measureText(text.substr(0, i)).width > max_width; i--);
-
-		result = text.substr(0, i);
-
-		if (i !== text.length) {
-			for (j = 0; result.indexOf(' ', j) !== -1; j = result.indexOf(' ', j) + 1);
-		}
-
-		lines.push(result.substr(0, j || result.length));
-		width = Math.max(width, ctx2.measureText(lines[lines.length - 1]).width);
-		text = text.substr(lines[lines.length - 1].length, text.length);
-	}
-	for (let k = 0; k < lines.length; k++) {
-		lines[k].trim();
-	}
-	// return the lines array
-	return lines;
 }
 
 module.exports.info = {
