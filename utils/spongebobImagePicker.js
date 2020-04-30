@@ -57,17 +57,17 @@ class SpongebobImage {
 
 		return canvas;
 	}
-	async generateTitlecard(lines) {
+	async generateTitlecard(lines, dynamFontSize) {
 		let canvreturn;
 		if (this.imageType === 'dragonball') {
 			canvreturn = await this.generateDragonballTitlecard(lines);
 		}
 		else {
-			canvreturn = await this.generateSpongebobTitlecard(lines);
+			canvreturn = await this.generateSpongebobTitlecard(lines, dynamFontSize);
 		}
 		return canvreturn;
 	}
-	async generateSpongebobTitlecard(lines) {
+	async generateSpongebobTitlecard(lines, dynamFontSize) {
 		function renderLines(ctx, lines2, fontSize) {
 			const lineOffset = lines2.length * (fontSize / 2);
 			for (let i = 0, j = lines2.length; i < j; ++i) {
@@ -84,16 +84,16 @@ class SpongebobImage {
 		const background = await Canvas.loadImage(this.backgroundImageURL);
 		ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
 		// render all the lines
-		ctx.font = '60px "Some Time Later"';
+		ctx.font = dynamFontSize + 'px "Some Time Later"';
 		ctx.fillStyle = this.fontColour;
 		ctx.textAlign = 'center';
 		ctx.shadowOffsetX = -3;
 		ctx.shadowOffsetY = 3;
 		ctx.shadowColor = '#000000';
-		renderLines(ctx, lines, 60);
+		renderLines(ctx, lines, dynamFontSize);
 		return canvas;
 	}
-	async generateDragonballTitlecard(lines) {
+	async generateDragonballTitlecard(lines, dynamFontSize) {
 		function renderLines(ctx, lines2, fontSize) {
 			const lineOffset = lines2.length * (fontSize / 2);
 			for (let i = 0, j = lines2.length; i < j; ++i) {
@@ -110,13 +110,13 @@ class SpongebobImage {
 		const background = await Canvas.loadImage(this.backgroundImageURL);
 		ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
 		// render all the lines
-		ctx.font = '60px "Final Frontier"';
+		ctx.font = dynamFontSize + 'px "Final Frontier"';
 		ctx.fillStyle = this.fontColour;
 		ctx.textAlign = 'center';
 		ctx.shadowOffsetX = -3;
 		ctx.shadowOffsetY = 3;
 		ctx.shadowColor = '#000000';
-		renderLines(ctx, lines, 60);
+		renderLines(ctx, lines, dynamFontSize);
 		const balls = await Canvas.loadImage('./images/spongebob/dragonball.png');
 		ctx.drawImage(balls, 0, 0, canvas.width, canvas.height);
 		return canvas;

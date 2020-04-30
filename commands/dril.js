@@ -116,7 +116,6 @@ function doStuffToFont(text, fontSize) {
 		lines.push(result);
 		width = Math.max(width, ctx2.measureText(result).width);
 		tokens = tokens.slice(i);
-        
     }
 
 
