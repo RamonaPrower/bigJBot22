@@ -35,7 +35,7 @@ function checkMessage(message, tweetMessage) {
 		return;
 	}
 	// this checks for custom emojis from Botutils
-	else if (Botutils.regex.emoji.test(message)) {
+	else if (Botutils.emoji.test(message)) {
 		cancelMessage(message, 'I can\'t do emojis yet! b-baka!');
 		return;
 	}
@@ -55,7 +55,8 @@ async function renderImage(message, tweetMessage) {
 	// register the font to the system
 	Canvas.registerFont('./fonts/SegoeUI.ttf', { family: 'Segoe UI' });
 	// calculates the canvas size based on the lines
-	const { canvasWidth, canvasHeight, lines } = doStuffToFont(tweetMessage, 27);
+	const { canvasWidth, canvasHeight, lines } = Botutils.drilNewLineCreator(tweetMessage, 27, 560);
+	// const { canvasWidth, canvasHeight, lines } = doStuffToFont(tweetMessage, 27);
 	if (lines.length === 0) {
 		message.channel.stopTyping();
 		message.channel.send('no');
@@ -87,48 +88,10 @@ async function renderImage(message, tweetMessage) {
 
 }
 
-function doStuffToFont(text, fontSize) {
-	// create dummy canvas and put variables in the place
-	const canvas2 = Canvas.createCanvas(631, 560);
-	const ctx2 = canvas2.getContext('2d');
-	const max_width = 560;
-	const lines = [];
-	let result;
-	const nlText = text.split(/\r\n|\r|\n/).join(' ');
-	let tokens = nlText.split(' ');
-	// Font and size is required for ctx.measureText()
-	ctx2.font = fontSize + 'px "Segoe UI",Arial,sans-serif';
-
-
-	// Start calculation
-	while (tokens.length > 0) {
-		let width = 0, i;
-        for(i = tokens.length; i > 0; i--) {
-          width = ctx2.measureText(tokens.slice(0, i).join(' ')).width;
-          if (width <= max_width) {
-            break;
-          }
-        }
-		if (i == 0) {
-			return { lines };
-		}
-		result = tokens.slice(0, i).join(' ');
-		lines.push(result);
-		width = Math.max(width, ctx2.measureText(result).width);
-		tokens = tokens.slice(i);
-    }
-
-
-	// Calculate canvas size, add margin
-	const canvasWidth = 631;
-	const canvasHeight = 255 + (fontSize + 5) * lines.length;
-	return { canvasWidth, canvasHeight, lines };
-}
-
 function renderFont(ctx, lines, fontSize) {
 	// run ctx.filltext as many times as there is lines
 	for (let i = 0, j = lines.length; i < j; ++i) {
-		ctx.fillText(lines[i], 36, 100 + fontSize + (fontSize + 6) * i);
+		ctx.fillText(lines[i], 36, 100 + fontSize + (fontSize + 7) * i);
 	}
 }
 
