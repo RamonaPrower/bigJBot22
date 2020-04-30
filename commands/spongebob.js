@@ -33,7 +33,7 @@ module.exports = {
 
 function checkMessage(message, imageMessage) {
 	if (imageMessage.length > 1516) {
-		cancelMessage(message, 'that message is too long! 140 characters or less, b-baka!');
+		cancelMessage(message, 'that message is too long! 1516 characters or less, b-baka!');
 		return;
 	}
 	// this checks for custom emojis from Botutils
