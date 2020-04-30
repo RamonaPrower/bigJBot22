@@ -4,7 +4,6 @@ const Botutils = require('../utils/botutils');
 const {
 	SpongebobImage,
 } = require('../utils/spongebobImagePicker');
-const { performance } = require('perf_hooks');
 
 // exports
 module.exports = {
@@ -67,10 +66,7 @@ async function renderCreditsImage(message, imageMessage) {
 
 async function renderTitleCardImage(message, imageMessage, SBimage) {
 	// const lines = calculateLines(imageMessage, 60, 640, 480, 75);
-	const startMessageParse = performance.now();
 	const titleImage = await SBimage.generateTitlecard(imageMessage);
-	const endMessageParse = performance.now();
-	console.log(`newLineCreator took ${endMessageParse - startMessageParse}ms to parse ${imageMessage.length} characters `);
 	const out = fs.createWriteStream(SBimage.titlecardUri);
 	const stream = titleImage.createPNGStream();
 	await stream.pipe(out);

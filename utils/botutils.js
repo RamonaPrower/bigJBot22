@@ -1,21 +1,16 @@
 const Canvas = require('canvas');
-const { performance } = require('perf_hooks');
 module.exports = {
     emoji: new RegExp('<(a?):.*?:(.*?)>'),
     spongebobNewLineCreator(text, fontSize, maxWidth, maxHeight, fontName) {
         // set up the variables we'll need for calculation
-        let perfA = performance.now();
         const canvas = Canvas.createCanvas(640, 480);
         const ctx = canvas.getContext('2d');
         let lines = [];
-        let loopAmount = 0;
         let result;
         const cachedTokens = text.split(/\r\n|\r|\n/).join(' ').split(' ');
         let tokens = cachedTokens;
         let dynamFontSize = fontSize;
         ctx.font = dynamFontSize + 'px ' + fontName;
-        let perfB = performance.now();
-        console.log(`initial setup took ${Math.round(perfB - perfA)}ms`);
         // while there's tokens left
         while (tokens.length > 0) {
             let width = 0, i;
@@ -52,16 +47,12 @@ module.exports = {
             tokens = tokens.slice(lastValid);
             if ((lines.length * dynamFontSize) > maxHeight && tokens.length == 0) {
                 // figure out how far over we are
-                perfA = performance.now();
                 const overValue = (lines.length * dynamFontSize) - maxHeight;
                 const fontSizeReduc = Math.ceil(overValue / dynamFontSize);
                 dynamFontSize = dynamFontSize - (fontSizeReduc / 2);
-                loopAmount++;
                 ctx.font = dynamFontSize + 'px ' + fontName;
                 tokens = cachedTokens;
                 lines = [];
-                perfB = performance.now();
-                console.log(`height adjust loop took ${Math.round(perfB - perfA)}ms, looped ${loopAmount} times so far`);
             }
         }
 
