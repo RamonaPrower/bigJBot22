@@ -33,7 +33,7 @@ module.exports = {
 };
 
 function checkMessage(message, imageMessage) {
-	if (imageMessage.length > 999) {
+	if (imageMessage.length > 1516) {
 		cancelMessage(message, 'that message is too long! 140 characters or less, b-baka!');
 		return;
 	}
@@ -68,10 +68,9 @@ async function renderCreditsImage(message, imageMessage) {
 async function renderTitleCardImage(message, imageMessage, SBimage) {
 	// const lines = calculateLines(imageMessage, 60, 640, 480, 75);
 	const startMessageParse = performance.now();
-	const { lines, dynamFontSize } = Botutils.newLineCreator(imageMessage, 60, 590, '"Some Time Later"');
+	const titleImage = await SBimage.generateTitlecard(imageMessage);
 	const endMessageParse = performance.now();
 	console.log(`newLineCreator took ${endMessageParse - startMessageParse}ms to parse ${imageMessage.length} characters `);
-	const titleImage = await SBimage.generateTitlecard(lines, dynamFontSize);
 	const out = fs.createWriteStream(SBimage.titlecardUri);
 	const stream = titleImage.createPNGStream();
 	await stream.pipe(out);
