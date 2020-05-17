@@ -1,18 +1,12 @@
 // imports
-const Canvas = require('canvas');
 const Discord = require('discord.js');
+const imageGeneration = require('../utils/imageGeneration');
 // exports
 module.exports = {
     async execute(message) {
         const subject = messageHandler(message);
-        const canvas = Canvas.createCanvas(334, 144);
-        const ctx = canvas.getContext('2d');
-        const background = await Canvas.loadImage('./images/location.png');
-        ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
-        ctx.font = '15px Arial';
-        ctx.fillText(subject, 24, 38, 253);
-        const attachment = new Discord.Attachment(canvas.toBuffer(), 'location.png');
-        console.log(subject);
+        const imageBuffer = await imageGeneration.locationImage(subject);
+        const attachment = new Discord.MessageAttachment(imageBuffer, 'location.png');
         message.channel.send(attachment);
     },
 };

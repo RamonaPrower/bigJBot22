@@ -16,7 +16,7 @@ module.exports = {
 		}
 		else {
 			// this is when it's just the command, it'll skip back a message
-			message.channel.fetchMessages({
+			message.channel.messages.fetch({
 				limit: 1,
 				before: message.id,
 			})
@@ -82,7 +82,7 @@ async function renderImage(message, tweetMessage) {
 	ctx.fillStyle = '#8899a6';
 	ctx.fillText(dateTimeFin, 36, canvasHeight - 120);
 	// send attachment
-	const attachment = new Discord.Attachment(canvas.toBuffer(), 'driltime.png');
+	const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'driltime.png');
 	message.channel.send(attachment);
 	message.channel.stopTyping();
 

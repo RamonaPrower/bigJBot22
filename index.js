@@ -20,7 +20,7 @@ for (const file of reactionFiles) {
 const bustinPlayer = new BustinPlayer();
 
 client.on('ready', () => {
-	console.log(`I'm up, and i'm part of ${client.guilds.size} servers`);
+	console.log(`I'm up, and i'm part of ${client.guilds.cache.size} servers`);
 });
 
 client.on('message', message => {

@@ -10,10 +10,11 @@ class BustinPlayer {
     async start(file, voiceChannel) {
                 const guildId = voiceChannel.guild.id;
                 const connection = await voiceChannel.join();
-                const dispatcher = connection.playFile(file);
+                const dispatcher = connection.play(file, { volume: false });
                 this.activeChannels.set(guildId, dispatcher);
-                dispatcher.on('end', () => {
+                dispatcher.on('finish', () => {
                     connection.disconnect();
+                    voiceChannel.leave();
                     this.activeChannels.delete(guildId);
                 });
     }
@@ -26,7 +27,8 @@ class BustinPlayer {
         const guildId = voiceChannel.guild.id;
         const dispatcher = this.activeChannels.get(guildId);
         this.activeChannels.delete(guildId);
-        dispatcher.end();
+        dispatcher.destroy();
+        voiceChannel.leave();
     }
 }
 

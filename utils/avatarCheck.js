@@ -13,7 +13,7 @@ module.exports = async function(url) {
     }
 
     const prebuffer = await fetched.buffer();
-    
+
     if (animated) {
         buffer = await gifFrames({
             url: prebuffer,
