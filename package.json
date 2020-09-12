@@ -12,7 +12,7 @@
     "fluent-ffmpeg": "^2.1.2",
     "gif-frames": "^1.0.1",
     "libsodium-wrappers": "^0.7.6",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "opusscript": "0.0.7"
   },
   "author": "Ramona Prower",
