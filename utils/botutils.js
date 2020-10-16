@@ -15,6 +15,9 @@ module.exports = {
         while (tokens.length > 0) {
             let width = 0, i;
             let lastValid = 1;
+            // we do this forward for reasons of performance, on 1000 characters, going backwards it was taking upwards of 15 seconds
+            // this entire loop now takes about 80ms
+            // it does mean we have to set up some jank here and there but it's *so* much faster
             for (i = 1; i <= tokens.length; i++) {
                 width = ctx.measureText(tokens.slice(0, i).join(' ')).width;
                 // if this fits the layout
@@ -45,10 +48,13 @@ module.exports = {
             lines.push(result);
             width = Math.max(width, ctx.measureText(result).width);
             tokens = tokens.slice(lastValid);
+            // figure out how far over the height limit we are
             if ((lines.length * dynamFontSize) > maxHeight && tokens.length == 0) {
-                // figure out how far over we are
                 const overValue = (lines.length * dynamFontSize) - maxHeight;
                 const fontSizeReduc = Math.ceil(overValue / dynamFontSize);
+                // we reduce it by half, as that seems to clear up edge cases.
+                // this works because of the fact that we're counting from the whole image, but only need to reduce from the middle
+                // this was figured out 3 days after i did this code though
                 dynamFontSize = dynamFontSize - (fontSizeReduc / 2);
                 ctx.font = dynamFontSize + 'px ' + fontName;
                 tokens = cachedTokens;
@@ -59,7 +65,7 @@ module.exports = {
 
         return { lines, dynamFontSize };
     },
-    drilNewLineCreator(text, fontSize, maxWidth, maxHeight, fontName) {
+    drilNewLineCreator(text, fontSize, maxWidth) {
         // set up the variables we'll need for calculation
         const canvas = Canvas.createCanvas(640, 480);
         const ctx = canvas.getContext('2d');

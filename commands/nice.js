@@ -13,7 +13,7 @@ module.exports = {
                 }
         }
         else {
-            message.channel.fetchMessages({
+            message.channel.messages.fetch({
 				limit: 1,
 				before: message.id,
 			})

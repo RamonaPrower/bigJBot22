@@ -4,7 +4,7 @@ const path = require('path');
 module.exports = {
     async execute(message, bustinPlayer) {
 
-            const voiceChannel = message.member.voiceChannel;
+            const voiceChannel = message.member.voice.channel;
             if (!voiceChannel) return message.channel.send('<:bustin:663796431798140984>');
             const permissions = voiceChannel.permissionsFor(message.client.user);
             if (!permissions.has('CONNECT') || !permissions.has('SPEAK')) {

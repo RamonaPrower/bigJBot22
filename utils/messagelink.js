@@ -23,7 +23,7 @@ module.exports = {
         obj.channel = foundChannel;
         let foundMessage;
         try {
-            foundMessage = await obj.channel.fetchMessage(splitStr[2]);
+            foundMessage = await obj.channel.messages.fetch(splitStr[2]);
         }
         catch (error) {
             obj.found = false;

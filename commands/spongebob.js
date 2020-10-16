@@ -18,7 +18,7 @@ module.exports = {
 		}
 		else {
 			// this is when it's just the command, it'll skip back a message
-			message.channel.fetchMessages({
+			message.channel.messages.fetch({
 					limit: 1,
 					before: message.id,
 				})
