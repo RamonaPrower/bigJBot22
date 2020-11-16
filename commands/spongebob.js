@@ -54,8 +54,15 @@ function cancelMessage(message, errmessage) {
 }
 
 async function renderCreditsImage(message, imageMessage) {
-	// register font
-	const SBimage = new SpongebobImage(message.member.displayName, imageMessage);
+	// temp fix for DM's, extend to others where needed
+	let tempName;
+	if (!message.member) {
+		tempName = message.author.username;
+	}
+	else {
+		tempName = message.member.displayName;
+	}
+	const SBimage = new SpongebobImage(tempName, imageMessage);
 	const creditCanvas = await SBimage.generateCredits();
 	const out = fs.createWriteStream(SBimage.creditsCardUri);
 	const stream = creditCanvas.createPNGStream();
