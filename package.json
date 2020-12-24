@@ -8,7 +8,7 @@
     "@ffprobe-installer/ffprobe": "^1.1.0",
     "bufferutil": "^4.0.1",
     "canvas": "^2.6.1",
-    "date-and-time": "^0.6.3",
+    "date-and-time": "^0.14.2",
     "discord.js": "^12.3.1",
     "fluent-ffmpeg": "^2.1.2",
     "gif-frames": "^1.0.1",
