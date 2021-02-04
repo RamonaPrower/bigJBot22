@@ -1,10 +1,11 @@
 // imports
 const imageGeneration = require('../utils/imageGeneration');
 const Discord = require('discord.js');
+const runes = require('runes');
 // exports
 module.exports = {
     async execute(message) {
-        const shortname = message.member.displayName.substring(0, 20);
+        const shortname = runes.substr(message.member.displayName, 0, 20)
         const avatarURL = message.member.user.displayAvatarURL({ format: 'png', dynamic: true, size: 512 });
         const imageBuffer = await imageGeneration.thosBeansImage(avatarURL, shortname);
         const attachment = new Discord.MessageAttachment(imageBuffer, 'thosbeans.png');

@@ -37,10 +37,10 @@ function checkMessage(message, imageMessage) {
 		return;
 	}
 	// this checks for custom emojis from Botutils
-	else if (Botutils.emoji.test(message)) {
-		cancelMessage(message, 'that message has emojis in! I can\'t handle those!!');
-		return;
-	}
+	// else if (Botutils.emoji.test(message)) {
+	// 	cancelMessage(message, 'that message has emojis in! I can\'t handle those!!');
+	// 	return;
+	// }
  else {
 		renderCreditsImage(message, imageMessage);
 	}

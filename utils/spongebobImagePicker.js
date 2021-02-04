@@ -3,6 +3,7 @@ const fs = require('fs');
 const spongebobData = require('../strings/spongebob.json');
 const ffmpeg = require('fluent-ffmpeg');
 const Botutils = require('../utils/botutils');
+const { fillTextWithTwemoji, measureText } = require('node-canvas-with-twemoji-and-discord-emoji');
 /**
  * New Spongebob Image Generator
  */
@@ -54,7 +55,7 @@ class SpongebobImage {
 		ctx.font = '72px "Some Time Later"';
 		ctx.fillStyle = '#413263';
 		ctx.textAlign = 'center';
-		ctx.fillText(this.user, 320, 300, 520);
+		await fillTextWithTwemoji(ctx, this.user, 320, 300, 520);
 
 		return canvas;
 	}
@@ -71,12 +72,12 @@ class SpongebobImage {
 		return canvreturn;
 	}
 	async generateSpongebobTitlecard(lines, dynamFontSize) {
-		function renderLines(ctx, lines2, fontSize) {
+		async function renderLines(ctx, lines2, fontSize) {
 			const lineOffset = lines2.length * (fontSize / 2);
 			for (let i = 0, j = lines2.length; i < j; ++i) {
 				//  ok so this line is a doozy
 				// it's baseHeight - offset, then add a lineHeight times position, then add 2/3rds font size to get it equal
-				ctx.fillText(lines2[i], 320, ((240 - lineOffset) + ((fontSize * i) + 5)) + (fontSize / 1.5));
+				await fillTextWithTwemoji(ctx,lines2[i], 320, ((240 - lineOffset) + ((fontSize * i) + 5)) + (fontSize / 1.5));
 			}
 		}
 		Canvas.registerFont('./fonts/sometimelater.otf', {
@@ -93,16 +94,16 @@ class SpongebobImage {
 		ctx.shadowOffsetX = -3;
 		ctx.shadowOffsetY = 3;
 		ctx.shadowColor = '#000000';
-		renderLines(ctx, lines, dynamFontSize);
+		await renderLines(ctx, lines, dynamFontSize);
 		return canvas;
 	}
 	async generateDragonballTitlecard(lines, dynamFontSize) {
-		function renderLines(ctx, lines2, fontSize) {
+		async function renderLines(ctx, lines2, fontSize) {
 			const lineOffset = lines2.length * (fontSize / 2);
 			for (let i = 0, j = lines2.length; i < j; ++i) {
 				//  ok so this line is a doozy
 				// it's baseHeight - offset, then add a lineHeight times position, then add 2/3rds font size to get it equal
-				ctx.fillText(lines2[i], 320, ((240 - lineOffset) + ((fontSize * i) + 5)) + (fontSize / 1.5));
+				await fillTextWithTwemoji(ctx, lines2[i], 320, ((240 - lineOffset) + ((fontSize * i) + 5)) + (fontSize / 1.5));
 			}
 		}
 		Canvas.registerFont('./fonts/Finalnew.ttf', {
@@ -119,7 +120,7 @@ class SpongebobImage {
 		ctx.shadowOffsetX = -3;
 		ctx.shadowOffsetY = 3;
 		ctx.shadowColor = '#000000';
-		renderLines(ctx, lines, dynamFontSize);
+		await renderLines(ctx, lines, dynamFontSize);
 		const balls = await Canvas.loadImage('./images/spongebob/dragonball.png');
 		ctx.drawImage(balls, 0, 0, canvas.width, canvas.height);
 		return canvas;

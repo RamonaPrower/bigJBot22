@@ -1,6 +1,7 @@
 const Canvas = require('canvas');
 const getAvatar = require('../utils/avatarCheck');
 const date = require('date-and-time');
+const { fillTextWithTwemoji, measureText } = require('node-canvas-with-twemoji-and-discord-emoji');
 
 module.exports = {
     /**
@@ -10,24 +11,33 @@ module.exports = {
      * @returns {Buffer} returns canvas image buffer
      */
     async thatWereMeImage(avatarURL, shortname) {
+        // prepare date
         const now = new Date();
         const dateFin = date.format(now, 'MMM DD, YYYY');
+        // register font
         Canvas.registerFont('./fonts/trebucbd.ttf', { family: 'Trebuchet MS', weight: 'bold' });
         Canvas.registerFont('./fonts/Verdana.ttf', { family: 'Verdana' });
+        // create canvas
         const canvas = Canvas.createCanvas(242, 70);
         const ctx = canvas.getContext('2d');
+        // load and draw background
         const background = await Canvas.loadImage('./images/godiwishbackground.png');
         ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+        // load and draw avatar
         const buffer = await getAvatar(avatarURL);
         const avatar = await Canvas.loadImage(buffer);
         ctx.drawImage(avatar, 8, 4, 50, 50);
+        // set font for name and draw
         ctx.font = 'bold 18px "Trebuchet MS", sans-serif';
-        const nameLength = ctx.measureText(`${shortname}21`).width;
+        const nameLength = measureText(ctx, shortname).width;
         ctx.fillStyle = '#337287';
-        ctx.fillText(`${shortname}21`, 86, 32);
+        // ctx.fillText(`${shortname}21`, 86, 32);
+        await fillTextWithTwemoji(ctx, shortname, 86, 32);
+        // set font for date
         ctx.font = '11px "Verdana", sans-serif';
         ctx.fillStyle = '#778584';
         ctx.fillText(dateFin, 86 + 10 + nameLength, 32);
+        // poorly upscale image (intended)
         const canvas2 = Canvas.createCanvas(canvas.width * 2, canvas.height * 2);
         const ctx2 = canvas2.getContext('2d');
         ctx2.drawImage(canvas, 0, 0, canvas2.width, canvas2.height);
@@ -84,9 +94,9 @@ module.exports = {
         const background = await Canvas.loadImage('./images/beans.png');
         ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
         ctx.font = 'bold 10px "Helvetica"';
-        const nameLength = ctx.measureText(shortname).width;
+        const nameLength = measureText(ctx, shortname).width;
         ctx.fillStyle = '#45619d';
-        ctx.fillText(`${shortname}`, 50, 26);
+        fillTextWithTwemoji(ctx, `${shortname}`, 50, 26);
         const buffer = await getAvatar(avatarURL);
         const avatar = await Canvas.loadImage(buffer);
         ctx.drawImage(avatar, 14, 15, 30, 30);
