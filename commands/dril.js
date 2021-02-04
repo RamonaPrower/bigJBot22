@@ -3,6 +3,7 @@ const Discord = require('discord.js');
 const Canvas = require('canvas');
 const Botutils = require('../utils/botutils');
 const date = require('date-and-time');
+const { fillTextWithTwemoji, measureText } = require('node-canvas-with-twemoji-and-discord-emoji');
 // exports
 module.exports = {
 	execute(message) {
@@ -35,10 +36,10 @@ function checkMessage(message, tweetMessage) {
 		return;
 	}
 	// this checks for custom emojis from Botutils
-	else if (Botutils.emoji.test(message)) {
-		cancelMessage(message, 'I can\'t do emojis yet! b-baka!');
-		return;
-	}
+	// else if (Botutils.emoji.test(message)) {
+	// 	cancelMessage(message, 'I can\'t do emojis yet! b-baka!');
+	// 	return;
+	// }
 	else {
 		renderImage(message, tweetMessage);
 	}
@@ -77,7 +78,7 @@ async function renderImage(message, tweetMessage) {
 	// draw the tweet and the time and date
 	ctx.font = '27px "Segoe UI",Arial,sans-serif';
 	ctx.fillStyle = '#ffffff';
-	renderFont(ctx, lines, 27);
+	await renderFont(ctx, lines, 27);
 	ctx.font = '14px "Segoe UI",Arial,sans-serif';
 	ctx.fillStyle = '#8899a6';
 	ctx.fillText(dateTimeFin, 36, canvasHeight - 120);
@@ -88,10 +89,10 @@ async function renderImage(message, tweetMessage) {
 
 }
 
-function renderFont(ctx, lines, fontSize) {
+async function renderFont(ctx, lines, fontSize) {
 	// run ctx.filltext as many times as there is lines
 	for (let i = 0, j = lines.length; i < j; ++i) {
-		ctx.fillText(lines[i], 36, 100 + fontSize + (fontSize + 7) * i);
+		await fillTextWithTwemoji(ctx, lines[i], 36, 100 + fontSize + (fontSize + 7) * i);
 	}
 }
 

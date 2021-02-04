@@ -8,12 +8,14 @@
     "@ffprobe-installer/ffprobe": "^1.1.0",
     "bufferutil": "^4.0.1",
     "canvas": "^2.6.1",
-    "date-and-time": "^0.6.3",
+    "date-and-time": "^0.14.2",
     "discord.js": "^12.3.1",
     "fluent-ffmpeg": "^2.1.2",
     "gif-frames": "^1.0.1",
     "libsodium-wrappers": "^0.7.8",
-    "node-fetch": "^2.6.1"
+    "node-canvas-with-twemoji-and-discord-emoji": "^1.1.8",
+    "node-fetch": "^2.6.1",
+    "runes": "^0.4.3"
   },
   "author": "Ramona Prower",
   "license": "ISC"

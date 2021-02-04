@@ -1,4 +1,6 @@
 const Canvas = require('canvas');
+const { fillTextWithTwemoji, measureText } = require('node-canvas-with-twemoji-and-discord-emoji');
+
 module.exports = {
     emoji: new RegExp('<(a?):.*?:(.*?)>'),
     spongebobNewLineCreator(text, fontSize, maxWidth, maxHeight, fontName) {
@@ -19,7 +21,7 @@ module.exports = {
             // this entire loop now takes about 80ms
             // it does mean we have to set up some jank here and there but it's *so* much faster
             for (i = 1; i <= tokens.length; i++) {
-                width = ctx.measureText(tokens.slice(0, i).join(' ')).width;
+                width = measureText(ctx, tokens.slice(0, i).join(' ')).width;
                 // if this fits the layout
                 if (width <= maxWidth) {
                     lastValid = i;
@@ -46,7 +48,7 @@ module.exports = {
             // slice by calculated amount of words
             result = tokens.slice(0, lastValid).join(' ');
             lines.push(result);
-            width = Math.max(width, ctx.measureText(result).width);
+            width = Math.max(width, measureText(ctx, result).width);
             tokens = tokens.slice(lastValid);
             // figure out how far over the height limit we are
             if ((lines.length * dynamFontSize) > maxHeight && tokens.length == 0) {
@@ -79,7 +81,7 @@ module.exports = {
             let width = 0, i;
             let lastValid = 1;
             for (i = 1; i <= tokens.length; i++) {
-                width = ctx.measureText(tokens.slice(0, i).join(' ')).width;
+                width = measureText(ctx,tokens.slice(0, i).join(' ')).width;
                 // if this fits the layout
                 if (width <= maxWidth) {
                     lastValid = i;
@@ -100,7 +102,7 @@ module.exports = {
             // slice by calculated amount of words
             result = tokens.slice(0, lastValid).join(' ');
             lines.push(result);
-            width = Math.max(width, ctx.measureText(result).width);
+            width = Math.max(width, measureText(ctx, result).width);
             tokens = tokens.slice(lastValid);
         }
         const canvasWidth = 631;

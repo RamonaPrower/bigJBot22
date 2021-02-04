@@ -1,10 +1,13 @@
 // imports
 const Discord = require('discord.js');
 const imageGeneration = require('../utils/imageGeneration');
+const runes = require('runes');
 // exports
 module.exports = {
     async execute(message) {
-            const shortname = message.member.displayName.split(' ').join('').substring(0, 8);
+            const removeSpacesFromName = message.member.displayName.split(' ').join('');
+            const runeRespecter = runes(removeSpacesFromName);
+            const shortname = runeRespecter.slice(0, 8).join('') + '21';
             const avatarURL = message.member.user.displayAvatarURL({ format: 'png', dynamic: true, size: 512 });
             const imageBuffer = await imageGeneration.thatWereMeImage(avatarURL, shortname);
             const attachment = new Discord.MessageAttachment(imageBuffer, 'godimme.png');
