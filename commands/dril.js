@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 const Canvas = require('canvas');
 const Botutils = require('../utils/botutils');
 const date = require('date-and-time');
-const { fillTextWithTwemoji, measureText } = require('node-canvas-with-twemoji-and-discord-emoji');
+const { fillTextWithTwemoji } = require('node-canvas-with-twemoji-and-discord-emoji');
 // exports
 module.exports = {
 	execute(message) {

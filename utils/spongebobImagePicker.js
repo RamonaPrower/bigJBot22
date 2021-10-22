@@ -3,7 +3,7 @@ const fs = require('fs');
 const spongebobData = require('../strings/spongebob.json');
 const ffmpeg = require('fluent-ffmpeg');
 const Botutils = require('../utils/botutils');
-const { fillTextWithTwemoji, measureText } = require('node-canvas-with-twemoji-and-discord-emoji');
+const { fillTextWithTwemoji } = require('node-canvas-with-twemoji-and-discord-emoji');
 /**
  * New Spongebob Image Generator
  */
@@ -77,7 +77,7 @@ class SpongebobImage {
 			for (let i = 0, j = lines2.length; i < j; ++i) {
 				//  ok so this line is a doozy
 				// it's baseHeight - offset, then add a lineHeight times position, then add 2/3rds font size to get it equal
-				await fillTextWithTwemoji(ctx,lines2[i], 320, ((240 - lineOffset) + ((fontSize * i) + 5)) + (fontSize / 1.5));
+				await fillTextWithTwemoji(ctx, lines2[i], 320, ((240 - lineOffset) + ((fontSize * i) + 5)) + (fontSize / 1.5));
 			}
 		}
 		Canvas.registerFont('./fonts/sometimelater.otf', {

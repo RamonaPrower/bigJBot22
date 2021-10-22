@@ -1,5 +1,5 @@
 const Canvas = require('canvas');
-const { fillTextWithTwemoji, measureText } = require('node-canvas-with-twemoji-and-discord-emoji');
+const { measureText } = require('node-canvas-with-twemoji-and-discord-emoji');
 
 module.exports = {
     emoji: new RegExp('<(a?):.*?:(.*?)>'),
@@ -81,7 +81,7 @@ module.exports = {
             let width = 0, i;
             let lastValid = 1;
             for (i = 1; i <= tokens.length; i++) {
-                width = measureText(ctx,tokens.slice(0, i).join(' ')).width;
+                width = measureText(ctx, tokens.slice(0, i).join(' ')).width;
                 // if this fits the layout
                 if (width <= maxWidth) {
                     lastValid = i;
