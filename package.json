@@ -4,7 +4,7 @@
   "description": "Rewrite of BigJB21",
   "main": "index.js",
   "dependencies": {
-    "@discordjs/opus": "^0.3.3",
+    "@discordjs/opus": "^0.8.0",
     "@ffprobe-installer/ffprobe": "^1.1.0",
     "bufferutil": "^4.0.3",
     "canvas": "^2.7.0",
